@@ -6,7 +6,6 @@ app.use(bodyParser.json());
 
 app
 // convert ids into array of ids from multiple formats (JSON, CSV, x-form array)
-// TODO: add middleware that throws error if method is GET/DELETE and no id specified
 .use(function (req, res, next) {
 
 	if(!req.query.id){
@@ -64,20 +63,16 @@ module.exports = function(cfg){
 		});
 
 	})
-/*
-	// get all chain stats i.e. count
-	.get('/chains/status', function (req, res) {
-
-		cfg.getRootBlocks(function(err, results){
-
-			if(err) return false;
-
-		});
-	})
-*/
 	// search all root blocks
-	// TODO: if id is given, throw error. no need to restrict chain results
 	.get('/chains/', function (req, res) {
+
+		if(req.query.id){
+			res.status(500).json({
+				data: "don't use id, get all root blocks",
+				success: false
+			});
+			return false;
+		}
 
 		cfg.getRootBlocks(function(err, results){
 
@@ -98,6 +93,14 @@ module.exports = function(cfg){
 	// TODO: if no ids given, throw error. can't return all blocks
 	.get('/blocks/', function (req, res) {
 
+		if(!req.query.id){
+			res.status(500).json({
+				data: "id query field required",
+				success: false
+			});
+			return false;
+		}
+
 		cfg.getBlocks(req.query.id, null, req.params.usePrevBlockId, function(err, results){
 
 			if(err){
@@ -114,8 +117,16 @@ module.exports = function(cfg){
 	})
 
 	// delete certain blocks
-	// TODO: if no ids given, throw error. can't blow away all chains in one call
 	.delete('/blocks/', function (req, res) {
+
+		if(!req.query.id){
+			res.status(500).json({
+				data: "id query field required",
+				success: false
+			});
+			return false;
+		}
+
 		cfg.deleteBlocks(req.query.id, null, function(err, results){
 
 			if(err){
@@ -132,8 +143,16 @@ module.exports = function(cfg){
 
 	})
 	// delete certain blocks under a chainId
-	// TODO: if no ids given, throw error and recommend /chains endpoint
 	.delete('/chains/:chainId/blocks/', function (req, res) {
+
+		if(!req.query.id){
+			res.status(500).json({
+				data: "id query field required. use /chains to list all root blocks",
+				success: false
+			});
+			return false;
+		}
+
 		cfg.deleteBlocks(req.query.id, req.params.chainId, function(err, results){
 
 			if(err){
@@ -151,8 +170,15 @@ module.exports = function(cfg){
 	})
 
 	// delete certain chains by id(s)
-	// TODO: if no ids given, throw error. can't blow away all chains in one call
 	.delete('/chains', function (req, res) {
+
+		if(!req.query.id){
+			res.status(500).json({
+				data: "id query field required",
+				success: false
+			});
+			return false;
+		}
 
 		cfg.deleteChains(req.query.id, function(err, results){
 
