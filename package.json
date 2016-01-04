@@ -1,0 +1,24 @@
+{
+  "name": "blockstore-node",
+  "version": "1.0.0",
+  "description": "REST block store service written in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pocketmax/blockstore-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pocketmax/blockstore-node/issues"
+  },
+  "homepage": "https://github.com/pocketmax/blockstore-node",
+  "devDependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "mongodb": "^2.1.2"
+  }
+}
